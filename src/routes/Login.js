@@ -1,67 +1,110 @@
 import React from 'react';
-import {extendObservable} from 'mobx';
-import { observer } from "mobx-react";
-import { Button, Input, Container, Header } from 'semantic-ui-react';
+// eslint-disable-next-line import/no-unresolved
+import { extendObservable } from 'mobx';
+// eslint-disable-next-line import/no-unresolved
+import { observer } from 'mobx-react';
+// eslint-disable-next-line import/no-unresolved
+import {
+  Message, Form, Button, Input, Container, Header,
+// eslint-disable-next-line import/no-unresolved
+} from 'semantic-ui-react';
+import { gql, graphql } from 'react-apollo';
 
-export default observer(
-    class Login extends React.Component{
+class Login extends React.Component {
+  constructor(props) {
+    super(props);
 
-        constructor(props){
-            super(props);
-            extendObservable(this,{
-                email:'',
-                password:''
-            });
-        }
+    extendObservable(this, {
+      email: '',
+      password: '',
+      errors: {},
+    });
+  }
 
-        onSubmit = () => {
-            const { email, password } = this;
-            console.log(email);
-            console.log(password);
-          };
-      
-          onChange = e => {
-            const { name, value } = e.target;
-            this[name] = value;
-          }; 
+  onSubmit = async () => {
+    const { email, password } = this;
+    const response = await this.props.mutate({
+      variables: { email, password },
+    });
 
+    // eslint-disable-next-line no-console
+    console.log(response);
 
+    const {
+      ok, token, refreshToken, errors,
+    } = response.data.login;
 
-        render(){
-            const { email, password } = this;
+    if (ok) {
+      localStorage.setItem('token', token);
+      localStorage.setItem('refreshToken', refreshToken);
+      this.props.history.push('/');
+    } else {
+      const err = {};
+      errors.forEach(({ path, message }) => {
+        err[`${path}Error`] = message;
+      });
 
-            
-            return(
-                <Container text>
-                        <Header as="h2">Login</Header>
-                        <Input name="email" onChange={this.onChange} value={email} placeholder="Email" fluid />
-                        <Input
-                            name="password"
-                            onChange={this.onChange}
-                            value={password}
-                            type="password"
-                            placeholder="Password"
-                            fluid
-                    />
-                    <Button onClick={this.onSubmit}>Submit</Button>
-            </Container>
+      this.errors = err;
+    }
+  };
 
-            )
-        
-        }
+  onChange = (e) => {
+    const { name, value } = e.target;
+    this[name] = value;
+  };
 
+  render() {
+    const { email, password, errors: { emailError, passwordError } } = this;
 
+    const errorList = [];
 
+    if (emailError) {
+      errorList.push(emailError);
+    }
 
+    if (passwordError) {
+      errorList.push(passwordError);
+    }
 
+    return (
+      <Container text>
+        <Header as="h2">Login</Header>
+        <Form>
+          <Form.Field error={!!emailError}>
+            <Input name="email" onChange={this.onChange} value={email} placeholder="Email" fluid />
+          </Form.Field>
+          <Form.Field error={!!passwordError}>
+            <Input
+              name="password"
+              onChange={this.onChange}
+              value={password}
+              type="password"
+              placeholder="Password"
+              fluid
+            />
+          </Form.Field>
+          <Button onClick={this.onSubmit}>Submit</Button>
+        </Form>
+        {errorList.length ? (
+          <Message error header="There was some errors with your submission" list={errorList} />
+        ) : null}
+      </Container>
+    );
+  }
+}
 
+const loginMutation = gql`
+  mutation($email: String!, $password: String!) {
+    login(email: $email, password: $password) {
+      ok
+      token
+      refreshToken
+      errors {
+        path
+        message
+      }
+    }
+  }
+`;
 
-
-        
-
-
-
-
-
-
-});
+export default graphql(loginMutation)(observer(Login));
