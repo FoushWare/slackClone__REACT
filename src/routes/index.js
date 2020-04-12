@@ -1,3 +1,5 @@
+/* eslint-disable import/extensions */
+/* eslint-disable import/no-unresolved */
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import {
@@ -7,7 +9,9 @@ import decode from 'jwt-decode';
 import Home from './Home';
 import Register from './Register';
 import Login from './Login';
+import ViewTeam from './ViewTeam';
 import CreateTeam from './CreateTeam';
+
 
 // check if the token in valid or not
 const isAuthenticated = () => {
@@ -42,6 +46,7 @@ export default () => (
       <Route path="/" exact component={Home} />
       <Route path="/register" exact component={Register} />
       <Route path="/login" exact component={Login} />
+      <Route path="/view-team" exact component={ViewTeam} />
       <PrivateRoute path="/create-team" exact component={CreateTeam} />
     </Switch>
   </BrowserRouter>
