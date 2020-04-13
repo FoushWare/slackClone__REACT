@@ -21,6 +21,7 @@ class CreateTeam extends React.Component {
 
   onSubmit = async () => {
     const { name } = this;
+    console.log(name);
     let response = null;
     try {
       response = await this.props.mutate({
@@ -28,6 +29,8 @@ class CreateTeam extends React.Component {
       });
     } catch (err) {
       this.props.history.push('/login');
+      console.log(err);
+      console.log(response);
       return;
     }
 
