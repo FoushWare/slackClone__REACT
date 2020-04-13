@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 import React from 'react';
 import styled from 'styled-components';
 import { Input } from 'semantic-ui-react';
