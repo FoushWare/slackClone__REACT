@@ -1,7 +1,8 @@
 /* eslint-disable import/no-unresolved */
 /* eslint-disable import/no-extraneous-dependencies */
 import React from 'react';
-import { gql, graphql } from 'react-apollo';
+import { graphql } from 'react-apollo';
+import gql from 'graphql-tag';
 import _ from 'lodash';
 import decode from 'jwt-decode';
 
@@ -15,8 +16,8 @@ const Sidebar = ({ data: { loading, allTeams }, currentTeamId }) => {
 
   const teamIdx = _.findIndex(allTeams, ['id', currentTeamId]);
   const team = allTeams[teamIdx];
-    console.log(allTeams);
-     
+  console.log(allTeams);
+
   let username = '';
   try {
     const token = localStorage.getItem('token');
@@ -28,7 +29,7 @@ const Sidebar = ({ data: { loading, allTeams }, currentTeamId }) => {
   return [
     <Teams
       key="team-sidebar"
-      teams={allTeams.map(t => ({
+      teams={allTeams.map((t) => ({
         id: t.id,
         letter: t.name.charAt(0).toUpperCase(),
       }))}

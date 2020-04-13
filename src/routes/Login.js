@@ -8,8 +8,8 @@ import {
   Message, Form, Button, Input, Container, Header,
 // eslint-disable-next-line import/no-unresolved
 } from 'semantic-ui-react';
-import { gql, graphql } from 'react-apollo';
-
+import { graphql } from 'react-apollo';
+import gql from 'graphql-tag';
 class Login extends React.Component {
   constructor(props) {
     super(props);
