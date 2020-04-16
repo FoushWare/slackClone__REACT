@@ -1,7 +1,10 @@
+/* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable import/no-unresolved */
 import React from 'react';
 import styled from 'styled-components';
+import { Icon } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
 
 const ChannelWrapper = styled.div`
   grid-column: 2;
@@ -33,12 +36,15 @@ const Green = styled.span`color: #38978d;`;
 
 const Bubble = ({ on = true }) => (on ? <Green>●</Green> : '○');
 
-const channel = ({ id, name }) => (
-  <SideBarListItem key={`channel-${id}`}>
-    #
-    {' '}
-    {name}
-  </SideBarListItem>
+const channel = ({ id, name }, teamId) => (
+  // eslint-disable-next-line jsx-a11y/anchor-is-valid
+  <Link key={`channel-${id}`} to={`/view-team/${teamId}/${id}`}>
+    <SideBarListItem>
+      #
+      {' '}
+      {name}
+    </SideBarListItem>
+  </Link>
 );
 const user = ({ id, name }) => (
   <SideBarListItem key={`user-${id}`}>
@@ -49,7 +55,7 @@ const user = ({ id, name }) => (
 );
 
 export default ({
-  teamName, userName, channels, users,
+  teamName, userName, channels, users, onAddChannelClick, teamId
 }) => (
   <ChannelWrapper>
     <PushLeft>
@@ -61,8 +67,8 @@ export default ({
     <div>
 
       <SideBarList>
-        <SideBarListHeader>Channels</SideBarListHeader>
-        {channels.map(channel)}
+        <SideBarListHeader>Channels <Icon onClick={onAddChannelClick} name="add circle" /></SideBarListHeader>
+        {channels.map( c => channel(c,teamId))}
       </SideBarList>
     </div>
     <div>
