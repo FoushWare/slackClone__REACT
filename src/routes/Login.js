@@ -1,3 +1,4 @@
+/* eslint-disable import/newline-after-import */
 import React from 'react';
 // eslint-disable-next-line import/no-unresolved
 import { extendObservable } from 'mobx';

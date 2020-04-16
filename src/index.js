@@ -9,7 +9,8 @@ import { ApolloLink } from 'apollo-link';
 import 'semantic-ui-css/semantic.min.css';
 
 import Routes from './routes';
-import registerServiceWorker from './registerServiceWorker';
+import * as serviceWorker from './serviceWorker';
+
 
 const httpLink = createHttpLink({ uri: 'http://localhost:8081/graphql' });
 
@@ -53,4 +54,5 @@ const App = (
 );
 
 ReactDOM.render(App, document.getElementById('root'));
-registerServiceWorker();
+serviceWorker.register();
+
