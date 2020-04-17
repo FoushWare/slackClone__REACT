@@ -12,16 +12,20 @@ const ChannelWrapper = styled.div`
   background-color: #4e3a4c;
   color: #958993;
 `;
+
+const TeamNameHeader = styled.h1`
+  color: #fff;
+  font-size: 20px;
+`;
+
 const SideBarList = styled.ul`
   width: 100%;
   list-style: none;
   padding-left: 0px;
 `;
-const TeamNameHeader = styled.h1`
-  color: #fff;
-  font-size: 20px;
-`;
+
 const paddingLeft = 'padding-left: 10px';
+
 const SideBarListItem = styled.li`
   padding: 2px;
   ${paddingLeft};
@@ -29,7 +33,9 @@ const SideBarListItem = styled.li`
     background: #3e313c;
   }
 `;
+
 const SideBarListHeader = styled.li`${paddingLeft};`;
+
 const PushLeft = styled.div`${paddingLeft};`;
 
 const Green = styled.span`color: #38978d;`;
@@ -37,38 +43,37 @@ const Green = styled.span`color: #38978d;`;
 const Bubble = ({ on = true }) => (on ? <Green>●</Green> : '○');
 
 const channel = ({ id, name }, teamId) => (
-  // eslint-disable-next-line jsx-a11y/anchor-is-valid
   <Link key={`channel-${id}`} to={`/view-team/${teamId}/${id}`}>
-    <SideBarListItem>
-      #
-      {' '}
-      {name}
-    </SideBarListItem>
+    <SideBarListItem># {name}</SideBarListItem>
   </Link>
 );
+
 const user = ({ id, name }) => (
   <SideBarListItem key={`user-${id}`}>
-    <Bubble />
-    {' '}
-    {name}
+    <Bubble /> {name}
   </SideBarListItem>
 );
 
 export default ({
-  teamName, userName, channels, users, onAddChannelClick, teamId
+  teamName,
+  username,
+  channels,
+  users,
+  onAddChannelClick,
+  teamId,
+  onInvitePeopleClick,
 }) => (
   <ChannelWrapper>
     <PushLeft>
-      <TeamNameHeader>
-        {teamName}
-      </TeamNameHeader>
-      {userName}
+      <TeamNameHeader>{teamName}</TeamNameHeader>
+      {username}
     </PushLeft>
     <div>
-
       <SideBarList>
-        <SideBarListHeader>Channels <Icon onClick={onAddChannelClick} name="add circle" /></SideBarListHeader>
-        {channels.map( c => channel(c,teamId))}
+        <SideBarListHeader>
+          Channels <Icon onClick={onAddChannelClick} name="add circle" />
+        </SideBarListHeader>
+        {channels.map(c => channel(c, teamId))}
       </SideBarList>
     </div>
     <div>
@@ -77,6 +82,10 @@ export default ({
         {users.map(user)}
       </SideBarList>
     </div>
-
+    <div>
+      <a href="#invite-people" onClick={onInvitePeopleClick}>
+        + Invite People
+      </a>
+    </div>
   </ChannelWrapper>
 );
