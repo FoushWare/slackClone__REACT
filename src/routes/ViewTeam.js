@@ -10,27 +10,31 @@ import AppLayout from '../components/AppLayout';
 import Sidebar from '../containers/Sidebar';
 import { allTeamsQuery } from '../graphql/team';
 
-const ViewTeam = ({ data: { loading, allTeams }, match: { params: { teamId, channelId } } }) => {
+const ViewTeam = ({ data: { loading, ownedTeams,myinvitedTeams }, match: { params: { teamId, channelId } } }) => {
+  console.log(myinvitedTeams);
   if (loading) {
     return null;
   }
 
-  if (!allTeams.length) {
+  const teams = [...ownedTeams,...myinvitedTeams];
+  if (!teams.length) {
     return <Redirect to="/create-team" />;
   }
 
   const teamIdInteger = parseInt(teamId, 10);
-  const teamIdx = teamIdInteger ? findIndex(allTeams, ['id', teamIdInteger]) : 0;
-  const team = allTeams[teamIdx];
+  const teamIdx = teamIdInteger ? findIndex(teams, ['id', teamIdInteger]) : 0;
+  const team = teamIdx === -1 ? teams[0]:teams[teamIdx];
+  console.log(team);
 
   const channelIdInteger = parseInt(channelId, 10);
   const channelIdx = channelIdInteger ? findIndex(team.channels, ['id', channelIdInteger]) : 0;
-  const channel = team.channels[channelIdx];
+  console.log('channelidx is : ' + channelIdx);
+  const channel = channelIdx === -1 ? team.channels[0] : team.channels[channelIdx];
 
   return (
     <AppLayout>
       <Sidebar
-        teams={allTeams.map(t => ({
+        teams={teams.map(t => ({
           id: t.id,
           letter: t.name.charAt(0).toUpperCase(),
         }))}
