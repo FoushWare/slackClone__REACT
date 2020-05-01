@@ -21,13 +21,7 @@ export default class Sidebar extends React.Component {
     this.setState(state => ({ openAddChannelModal: !state.openAddChannelModal }));
   };
 
-  handleCloseAddChannelModal = () => {
-    this.setState({ openAddChannelModal: false });
-  };
 
-  handleAddChannelClick = () => {
-    this.setState({ openAddChannelModal: true });
-  };
   toggleInvitePeopleModal = (e) => {
     if (e) {
       e.preventDefault();
@@ -35,24 +29,20 @@ export default class Sidebar extends React.Component {
     this.setState(state => ({ openInvitePeopleModal: !state.openInvitePeopleModal }));
   };
 
-  handleInvitePeopleClick = () => {
-    this.setState({ openInvitePeopleModal: true });
-  };
 
-  handleCloseInvitePeopleModal = () => {
-    this.setState({ openInvitePeopleModal: false });
-  };
 
   render() {
     const { teams, team } = this.props;
     const { openInvitePeopleModal, openAddChannelModal } = this.state;
 
     let username = '';
+    let isOwner = false;
     try {
       const token = localStorage.getItem('token');
       const { user } = decode(token);
       // eslint-disable-next-line prefer-destructuring
       username = user.username;
+      isOwner  =  user.id === team.owner; 
     } catch (err) {}
 
     return [
@@ -66,6 +56,7 @@ export default class Sidebar extends React.Component {
         users={[{ id: 1, name: 'slackbot' }, { id: 2, name: 'user1' }]}
         onAddChannelClick={this.toggleAddChannelModal}
         onInvitePeopleClick={this.toggleInvitePeopleModal}
+        isOwner = {isOwner}
       />,
       <AddChannelModal
         teamId={team.id}
