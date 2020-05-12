@@ -12,7 +12,6 @@ import { allTeamsQuery } from '../graphql/team';
 import MessageContainer from '../containers/MessageContainer';
 
 const ViewTeam = ({ data: { loading, ownedTeams,myinvitedTeams }, match: { params: { teamId, channelId } } }) => {
-  console.log(myinvitedTeams);
   if (loading) {
     return null;
   }
@@ -25,11 +24,9 @@ const ViewTeam = ({ data: { loading, ownedTeams,myinvitedTeams }, match: { param
   const teamIdInteger = parseInt(teamId, 10);
   const teamIdx = teamIdInteger ? findIndex(teams, ['id', teamIdInteger]) : 0;
   const team = teamIdx === -1 ? teams[0]:teams[teamIdx];
-  console.log(team);
 
   const channelIdInteger = parseInt(channelId, 10);
   const channelIdx = channelIdInteger ? findIndex(team.channels, ['id', channelIdInteger]) : 0;
-  console.log('channelidx is : ' + channelIdx);
   const channel = channelIdx === -1 ? team.channels[0] : team.channels[channelIdx];
 
   return (
