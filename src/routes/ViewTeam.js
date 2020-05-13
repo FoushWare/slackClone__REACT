@@ -19,7 +19,7 @@ const ViewTeam = ({ data: { loading,me,...otherProps  }, match: { params: { team
   // const teams = [...ownedTeams,...myinvitedTeams];
   console.log(otherProps);
   console.log(me);
-  const {teams} = me ;
+  const {teams,username} = me ;
   
   if (!teams.length) {
     return <Redirect to="/create-team" />;
@@ -41,6 +41,7 @@ const ViewTeam = ({ data: { loading,me,...otherProps  }, match: { params: { team
           letter: t.name.charAt(0).toUpperCase(),
         }))}
         team={team}
+        username={username}
       />
       {channel && <Header channelName={channel.name} />}
       {channel && (
