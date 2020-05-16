@@ -1,5 +1,5 @@
 import React from 'react';
-import { graphql } from 'react-apollo';
+import { graphql, compose } from 'react-apollo';
 import findIndex from 'lodash/findIndex';
 import { Redirect } from 'react-router-dom';
 
@@ -10,15 +10,14 @@ import AppLayout from '../components/AppLayout';
 import Sidebar from '../containers/Sidebar';
 import { meQuery } from '../graphql/team';
 import MessageContainer from '../containers/MessageContainer';
+import gql from 'graphql-tag';
 
-const ViewTeam = ({ data: { loading,me,...otherProps  }, match: { params: { teamId, channelId } } }) => {
+const ViewTeam = ({ mutate,data: { loading,me  }, match: { params: { teamId, channelId } } }) => {
   if (loading) {
     return null;
   }
 
   // const teams = [...ownedTeams,...myinvitedTeams];
-  console.log(otherProps);
-  console.log(me);
   const {teams,username} = me ;
   
   if (!teams.length) {
@@ -44,18 +43,29 @@ const ViewTeam = ({ data: { loading,me,...otherProps  }, match: { params: { team
         username={username}
       />
       {channel && <Header channelName={channel.name} />}
-      {channel && (
-        <Messages channelId={channel.id}>
-          <ul className="message-list">
-            <li />
-            <li />
-          </ul>
-        </Messages>
-      )}
       {channel && <MessageContainer channelId={channel.id} />}
-      {channel && <SendMessage channelName={channel.name} channelId={channel.id} />}
+      {channel &&
+      
+      <SendMessage
+        placeholder={channel.name}
+        onSubmit ={async (text)=>{
+          await mutate({variables:{text,channelId:channel.id}})
+        }}
+       
+       />}
     </AppLayout>
   );
 };
+const createMessageMutation = gql`
+  mutation($channelId: Int!, $text: String!) {
+    createMessage(channelId: $channelId, text: $text)
+  }
+`;
 
-export default graphql(meQuery,{options:{ fetchPolicy:'network-only'}})(ViewTeam);
+
+export default 
+
+compose(
+  graphql(meQuery,{options:{ fetchPolicy:'network-only'}}),
+  graphql(createMessageMutation)
+)(ViewTeam);

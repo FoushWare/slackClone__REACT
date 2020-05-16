@@ -1,3 +1,5 @@
+/* eslint-disable no-multi-spaces */
+/* eslint-disable import/first */
 /* eslint-disable import/no-unresolved */
 /* eslint-disable no-unused-vars */
 import React from 'react';
@@ -6,10 +8,10 @@ import {
 } from 'semantic-ui-react';
 import { withFormik } from 'formik';
 import gql from 'graphql-tag';
-import { compose, graphql } from 'react-apollo';
+import {  graphql,compose } from 'react-apollo';
 import findIndex from 'lodash/findIndex';
-
 import { meQuery } from '../graphql/team';
+
 
 const AddChannelModal = ({
   open,
