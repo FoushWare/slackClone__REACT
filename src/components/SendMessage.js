@@ -2,8 +2,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import { withFormik } from 'formik';
-import gql from 'graphql-tag';
-import { graphql,compose } from 'react-apollo';
 import { Input } from 'semantic-ui-react';
 
 const SendMessageWrapper = styled.div`
@@ -38,7 +36,6 @@ const SendMessage = ({
   </SendMessageWrapper>
 );
 
-
 export default 
   withFormik({
     mapPropsToValues: () => ({ message: '' }),
@@ -52,5 +49,4 @@ export default
 
       resetForm(false);
     },
-  })
-(SendMessage);
+  })(SendMessage);
