@@ -39,7 +39,7 @@ const SendMessage = ({
 export default 
   withFormik({
     mapPropsToValues: () => ({ message: '' }),
-    handleSubmit: async (values, { props: onSubmit, setSubmitting, resetForm }) => {
+    handleSubmit: async (values, { props: { onSubmit}, setSubmitting, resetForm }) => {
       if (!values.message || !values.message.trim()) {
         setSubmitting(false);
         return;
