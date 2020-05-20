@@ -14,14 +14,18 @@ const DirectMessageModal = ({
   onClose,
   teamId,
   data: { loading, getTeamMembers },
+
 }) => (
 
-  <Modal open={open} onClose={onClose}  style={{'margin-top':'100px!important'}}>
-    <Modal.Header>Add Channel</Modal.Header>
+  <Modal open={open} onClose={onClose} >
+    <Modal.Header>DirectMessage :)🔥🚬 </Modal.Header>
+    {console.log('teamid is ' +teamId)}
+    {console.log(getTeamMembers)}
+
     <Modal.Content>
       <Form>
         <Form.Field>
-          {!loading && (
+          {!loading &&(
               <Downshift
               onChange={(selectedUser) => {
                 history.push(`/view-team/user/${teamId}/${selectedUser.id}`);
@@ -37,9 +41,11 @@ const DirectMessageModal = ({
                 highlightedIndex,
             }) => (
                 <div>
-                  <Input {...getInputProps({ placeholder: 'Favorite color ?' })} fluid />
+                  <Input {...getInputProps({ placeholder: 'Team member to CHAT  !' })} fluid />
                   {isOpen ? (
                       <div style={{ border: '1px solid #ccc' }}>
+                            {console.log(getTeamMembers)}
+
                       {getTeamMembers
                         .filter(i =>
                             !inputValue ||
