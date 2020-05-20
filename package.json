@@ -19,6 +19,7 @@
     "apollo-link-http": "^1.1.0",
     "apollo-link-ws": "^1.0.20",
     "dotenv": "^8.2.0",
+    "downshift": "^1.18.0",
     "formik": "^0.10.3",
     "graphql": "^0.11.7",
     "graphql-tag": "^2.5.0",
@@ -30,8 +31,8 @@
     "react-apollo": "^2.0.1",
     "react-dom": "^16.1.0",
     "react-router-dom": "^4.2.2",
-    "semantic-ui-css": "^2.2.12",
-    "semantic-ui-react": "^0.76.0",
+    "semantic-ui-css": "^2.2.14",
+    "semantic-ui-react": "^0.74.2",
     "styled-components": "^2.2.3",
     "subscriptions-transport-ws": "^0.9.16"
   },
