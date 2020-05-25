@@ -70,6 +70,8 @@ const ViewTeam = ({ mutate,data: { loading,me,getUser }, match: { params: { team
                   }
                 }, 
                 })
+                console.log(response);
+
              }}/>
     </AppLayout>
   );

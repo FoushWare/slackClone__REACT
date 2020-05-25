@@ -5,58 +5,78 @@ import { Comment } from 'semantic-ui-react';
 
 import Messages from '../components/Messages';
 
-// const newChannelMessageSubscription = gql`
-//   subscription($channelId: Int!) {
-//     newChannelMessage(channelId: $channelId) {
-//       id
-//       text
-//       user {
-//         username
-//       }
-//       created_at
-//     }
-//   }
-// `;
+const newDirectMessageSubscription = gql`
+subscription($teamId: Int!, $userId: Int!) {
+  newDirectMessage(teamId: $teamId, userId: $userId) {
+      id
+      text
+      sender {
+        username
+      }
+     createdAt
+    }
+  }
+`;
 
 // eslint-disable-next-line react/prefer-stateless-function
 class DirectMessageContainer extends React.Component {
-  // componentWillMount() {
-  //   this.unsubscribe = this.subscribe(this.props.channelId);
-  // }
+  componentWillMount() {
+    console.log('componentwillmount');
+    this.unsubscribe = this.subscribe(this.props.teamId, this.props.userId);
+  }
 
-  // componentWillReceiveProps({ channelId }) {
-  //   if (this.props.channelId !== channelId) {
-  //     if (this.unsubscribe) {
-  //       this.unsubscribe();
-  //     }
-  //     this.unsubscribe = this.subscribe(channelId);
-  //   }
-  // }
+  componentWillReceiveProps({ teamId, userId }) {
+    console.log('componentWillReceiveProps');
+    console.log(" cwrp teamid : "+this.props.teamId );
+    console.log("cwrp userid : "+this.props.userId );
 
-  // componentWillUnmount() {
-  //   if (this.unsubscribe) {
-  //     this.unsubscribe();
-  //   }
-  // }
+    if (this.props.teamId !== teamId || this.props.userId !== userId) {
+      if (this.unsubscribe) {
+        this.unsubscribe();
+        console.log("cancel subscrition");
+      }
+      console.log("we will subscribe");
+      this.unsubscribe = this.subscribe(teamId, userId);
+    }
+  }
 
-  // subscribe = channelId =>
-  //   this.props.data.subscribeToMore({
-  //     document: newChannelMessageSubscription,
-  //     variables: {
-  //       channelId,
-  //     },
-  //     updateQuery: (prev, { subscriptionData }) => {
-  //       if (!subscriptionData) {
-  //         return prev;
-  //       }
+  componentWillUnmount() {
+    console.log("componentWillUnmount");
+    if (this.unsubscribe) {
+      this.unsubscribe();
+    }
+  }
 
-  //       return {
-  //         ...prev,
-  //         messages: [...prev.messages, subscriptionData.newChannelMessage],
-  //       };
-  //     },
-  //   });
+  subscribe = (teamId, userId) =>{
 
+    console.log("subscribe function" + "teamId is : "+ teamId);
+    console.log("subscribe function" + "userId is : "+ userId);
+     this.props.data.subscribeToMore({
+      document: newDirectMessageSubscription,
+      variables: {
+        teamId,
+        userId,
+      },
+      updateQuery: (prev, { subscriptionData }) => {
+        console.log(prev.directMessages);
+        console.log("subscriptionData : " + subscriptionData.data.newDirectMessage);
+      if (!subscriptionData) {
+        return prev;
+      }
+              console.log("New Messages froush");
+
+      
+      
+      return {
+        ...prev,
+        directMessages: [...prev.directMessages, subscriptionData.data.newDirectMessage],
+      };
+    },
+  });
+
+  console.log("sub to more ");
+}
+  
   render() {
     const { data: { loading, directMessages } } = this.props;
 
@@ -97,11 +117,12 @@ const directMessagesQuery = gql`
 `;
 
 export default graphql(directMessagesQuery, {
-  variables: props => ({
+  
+  options:props =>({
+    fetchPolicy: 'network-only',
+    variables:{
     teamId: props.teamId,
     userId: props.userId,
-  }),
-  options: {
-    fetchPolicy: 'network-only',
   },
+  }),
 })(DirectMessageContainer);

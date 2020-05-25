@@ -18,7 +18,7 @@ const DirectMessageModal = ({
 }) => (
 
   <Modal open={open} onClose={onClose} >
-    <Modal.Header>DirectMessage :)🔥🚬 </Modal.Header>
+    <Modal.Header>DirectMessage 🔥🚬 </Modal.Header>
     {console.log('teamid is ' +teamId)}
     {console.log(getTeamMembers)}
 
