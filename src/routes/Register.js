@@ -37,7 +37,7 @@ class Register extends React.Component {
       const { ok, errors } = response.data.register;
       if (ok) {
         // eslint-disable-next-line react/destructuring-assignment
-        this.props.history.push('/');
+        this.props.history.push('/login');
       } else {
         const err = {};
         errors.forEach(({ path, message }) => {

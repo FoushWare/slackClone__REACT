@@ -18,6 +18,7 @@ const DirectMessageModal = ({
 }) => (
 
   <Modal open={open} onClose={onClose} >
+    // eslint-disable-next-line
     <Modal.Header>DirectMessage 🔥🚬 </Modal.Header>
     {console.log('teamid is ' +teamId)}
     {console.log(getTeamMembers)}

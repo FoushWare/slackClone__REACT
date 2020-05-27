@@ -48,8 +48,9 @@ class DirectMessageContainer extends React.Component {
   }
 
   subscribe = (teamId, userId) =>{
-
+// eslint-disable-next-line
     console.log("subscribe function" + "teamId is : "+ teamId);
+    // eslint-disable-next-line
     console.log("subscribe function" + "userId is : "+ userId);
      this.props.data.subscribeToMore({
       document: newDirectMessageSubscription,
