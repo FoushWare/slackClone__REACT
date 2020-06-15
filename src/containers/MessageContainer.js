@@ -24,7 +24,7 @@ const newChannelMessageSubscription = gql`
 const Message = ({ message: { url, text, filetype } }) => {
   if (url) {
     if (filetype.startsWith('image/')) {
-      return <img src={url} alt="" />;
+      return <img src={url} style ={ {width: '100%', height: 'auto'} } alt="" />;
     } else if (filetype === 'text/plain') {
       return <RenderText url={url} />;
     } else if (filetype.startsWith('audio/')) {
@@ -92,9 +92,9 @@ class MessageContainer extends React.Component {
           gridRow: 2,
           paddingLeft: '20px',
           paddingRight: '20px',
-          display: 'flex',
-          flexDirection: 'column-reverse',
-          overflowY: 'auto',
+          // display: 'flex',
+          // flexDirection: 'column-reverse',
+          // overflowY: 'auto',
         }}
         channelId={channelId}
         disableClick
