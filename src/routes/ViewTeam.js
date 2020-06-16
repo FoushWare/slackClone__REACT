@@ -17,7 +17,7 @@ const ViewTeam = ({ mutate,data: { loading,me  }, match: { params: { teamId, cha
   }
 
   // const teams = [...ownedTeams,...myinvitedTeams];
-  const {teams,username} = me ;
+  const {id:currentUserId,teams,username} = me ;
   
   if (!teams.length) {
     return <Redirect to="/create-team" />;
@@ -40,6 +40,7 @@ const ViewTeam = ({ mutate,data: { loading,me  }, match: { params: { teamId, cha
         }))}
         team={team}
         username={username}
+        currentUserId={currentUserId}
       />
       {channel && <Header channelName={channel.name} />}
       {channel && <MessageContainer channelId={channel.id} />}

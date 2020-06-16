@@ -25,6 +25,7 @@ const AddChannelModal = ({
   resetForm,
   setFieldValue,
   teamId,
+  currentUserId,
 
 }) => (
     <Modal
@@ -64,6 +65,7 @@ const AddChannelModal = ({
               handleChange={(e, { value }) => setFieldValue('members', value)}
               teamId={teamId}
               placeholder="select members to invite"
+              currentUserId={currentUserId}
             />
           </Form.Field>
   )}
@@ -107,7 +109,10 @@ export default compose(
     handleSubmit: async (values, { props: { onClose, teamId, mutate }, setSubmitting }) => {
       await mutate({
         variables: {
-          teamId, name: values.name, public: values.public, members: values.members,
+          teamId,
+          name: values.name,
+          public: values.public,
+          members: values.members,
         },
         optimisticResponse: {
           createChannel: {
