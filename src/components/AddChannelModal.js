@@ -97,6 +97,7 @@ mutation($teamId: Int!, $name: String!, $public: Boolean, $members: [Int!]) {
       channel {
         id
         name
+        dm
       }
     }
   }
@@ -122,6 +123,7 @@ export default compose(
               __typename: 'Channel',
               id: -1,
               name: values.name,
+              dm:false
             },
           },
         },

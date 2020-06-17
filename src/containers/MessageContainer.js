@@ -1,10 +1,9 @@
 import React from 'react';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
-import { Comment } from 'semantic-ui-react';
-import FileUpload from '../components/FileUpload';
-import Messages from '../components/Messages';
+import { Button, Comment } from 'semantic-ui-react';
 
+import FileUpload from '../components/FileUpload';
 import RenderText from '../components/RenderText';
 
 const newChannelMessageSubscription = gql`
@@ -17,14 +16,15 @@ const newChannelMessageSubscription = gql`
       }
       url
       filetype
-      createdAt
+      created_at
     }
   }
 `;
+
 const Message = ({ message: { url, text, filetype } }) => {
   if (url) {
     if (filetype.startsWith('image/')) {
-      return <img src={url} style ={ {width: '100%', height: 'auto'} } alt="" />;
+      return <img src={url} alt="" />;
     } else if (filetype === 'text/plain') {
       return <RenderText url={url} />;
     } else if (filetype.startsWith('audio/')) {
@@ -41,6 +41,13 @@ const Message = ({ message: { url, text, filetype } }) => {
 };
 
 class MessageContainer extends React.Component {
+  state = {
+    hasMoreItems: true,
+  };
+
+  componentWillMount() {
+    this.unsubscribe = this.subscribe(this.props.channelId);
+  }
 
   componentWillReceiveProps({ channelId }) {
     if (this.props.channelId !== channelId) {
@@ -50,19 +57,14 @@ class MessageContainer extends React.Component {
       this.unsubscribe = this.subscribe(channelId);
     }
   }
-  componentWillMount() {
-    this.unsubscribe = this.subscribe(this.props.channelId);
 
-
-  }
   componentWillUnmount() {
     if (this.unsubscribe) {
       this.unsubscribe();
     }
   }
 
-  //Method to subscribe  .... use Dry principle Do not repeat yourself
-  subscribe = channelId => {
+  subscribe = channelId =>
     this.props.data.subscribeToMore({
       document: newChannelMessageSubscription,
       variables: {
@@ -72,34 +74,59 @@ class MessageContainer extends React.Component {
         if (!subscriptionData) {
           return prev;
         }
-        console.log("New Messages froush");
-        console.log(subscriptionData.data.newChannelMessage);
+
         return {
           ...prev,
-          messages: [...prev.messages, subscriptionData.data.newChannelMessage],
+          messages: [...prev.messages, subscriptionData.newChannelMessage],
         };
       },
     });
-  }
 
   render() {
-    const { data: { loading, messages },channelId } = this.props;
+    const { data: { loading, messages }, channelId } = this.props;
     return loading ? null : (
-      <Messages>
-          <FileUpload
+      <FileUpload
         style={{
           gridColumn: 3,
           gridRow: 2,
           paddingLeft: '20px',
           paddingRight: '20px',
-          // display: 'flex',
-          // flexDirection: 'column-reverse',
-          // overflowY: 'auto',
+          display: 'flex',
+          flexDirection: 'column-reverse',
+          overflowY: 'auto',
         }}
         channelId={channelId}
         disableClick
       >
         <Comment.Group>
+          {this.state.hasMoreItems && (
+            <Button
+              onClick={() => {
+                this.props.data.fetchMore({
+                  variables: {
+                    channelId: this.props.channelId,
+                    offset: this.props.data.messages.length,
+                  },
+                  updateQuery: (previousResult, { fetchMoreResult }) => {
+                    if (!fetchMoreResult) {
+                      return previousResult;
+                    }
+
+                    if (fetchMoreResult.messages.length < 35) {
+                      this.setState({ hasMoreItems: false });
+                    }
+
+                    return {
+                      ...previousResult,
+                      messages: [...previousResult.messages, ...fetchMoreResult.messages],
+                    };
+                  },
+                });
+              }}
+            >
+              Load more
+            </Button>
+          )}
           {messages.map(m => (
             <Comment key={`${m.id}-message`}>
               <Comment.Content>
@@ -116,15 +143,13 @@ class MessageContainer extends React.Component {
           ))}
         </Comment.Group>
       </FileUpload>
-
-      </Messages>
     );
   }
 }
 
 const messagesQuery = gql`
-  query($channelId: Int!) {
-    messages(channelId: $channelId) {
+  query($offset: Int!, $channelId: Int!) {
+    messages(offset: $offset, channelId: $channelId) {
       id
       text
       user {
@@ -132,16 +157,17 @@ const messagesQuery = gql`
       }
       url
       filetype
-      createdAt
+      created_at
     }
   }
 `;
 
 export default graphql(messagesQuery, {
-  variables: props => ({
-    channelId: props.channelId,
+  options: props => ({
+    fetchPolicy: 'network-only',
+    variables: {
+      channelId: props.channelId,
+      offset: 0,
+    },
   }),
-  options: {
-    fetchPolicy: 'network-only'
-  },
 })(MessageContainer);
