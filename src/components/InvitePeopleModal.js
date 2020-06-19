@@ -1,10 +1,8 @@
-/* eslint-disable import/no-unresolved */
 import React from 'react';
 import { Form, Input, Button, Modal } from 'semantic-ui-react';
 import { withFormik } from 'formik';
 import gql from 'graphql-tag';
-import { graphql,compose } from 'react-apollo';
-
+import { compose, graphql } from 'react-apollo';
 
 import normalizeErrors from '../normalizeErrors';
 
@@ -19,7 +17,8 @@ const InvitePeopleModal = ({
   touched,
   errors,
 }) => (
-  <Modal open={open} onClose={onClose}  style={{'margin-top':'100px'}}>
+  <Modal open={open} onClose={onClose}    style={{height: 'auto',marginTop:100,width:'90%',margin:'auto',display:'flex'}}
+>
     <Modal.Header>Add People to your Team</Modal.Header>
     <Modal.Content>
       <Form>
@@ -35,10 +34,16 @@ const InvitePeopleModal = ({
         </Form.Field>
         {touched.email && errors.email ? errors.email[0] : null}
         <Form.Group widths="equal">
-          <Button disabled={isSubmitting} fluid onClick={onClose}>
+          <Button 
+           style={{margin:5}}
+          disabled={isSubmitting} fluid onClick={onClose}>
             Cancel
           </Button>
-          <Button disabled={isSubmitting} onClick={handleSubmit} fluid>
+          <Button 
+          color='purple'
+         
+           style={{margin:5}}
+          disabled={isSubmitting} onClick={handleSubmit} fluid>
             Add User
           </Button>
         </Form.Group>

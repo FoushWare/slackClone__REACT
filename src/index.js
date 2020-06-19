@@ -2,9 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { ApolloProvider } from 'react-apollo';
 import 'semantic-ui-css/semantic.min.css';
-import * as serviceWorker from './serviceWorker';
 
 import Routes from './routes';
+import registerServiceWorker from './registerServiceWorker';
 import client from './apollo';
 
 const App = (
@@ -14,5 +14,4 @@ const App = (
 );
 
 ReactDOM.render(App, document.getElementById('root'));
-serviceWorker.register();
-
+registerServiceWorker();

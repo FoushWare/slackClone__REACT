@@ -1,19 +1,14 @@
-/* eslint-disable import/no-unresolved */
-/* eslint-disable no-unused-vars */
 import React from 'react';
 import { extendObservable } from 'mobx';
-import {
-  Message, Form, Button, Input, Container, Header,
-// eslint-disable-next-line import/no-unresolved
-} from 'semantic-ui-react';
+import { observer } from 'mobx-react';
+import { Message, Form, Button, Input, Container, Header } from 'semantic-ui-react';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
-import { observer } from 'mobx-react';
-
 
 class CreateTeam extends React.Component {
   constructor(props) {
     super(props);
+
     extendObservable(this, {
       name: '',
       errors: {},
@@ -22,16 +17,14 @@ class CreateTeam extends React.Component {
 
   onSubmit = async () => {
     const { name } = this;
-    console.log(name);
     let response = null;
+
     try {
       response = await this.props.mutate({
         variables: { name },
       });
     } catch (err) {
       this.props.history.push('/login');
-      console.log(err);
-      console.log(response);
       return;
     }
 
@@ -54,8 +47,7 @@ class CreateTeam extends React.Component {
   onChange = (e) => {
     const { name, value } = e.target;
     this[name] = value;
-  }
-
+  };
 
   render() {
     const { name, errors: { nameError } } = this;
@@ -65,6 +57,7 @@ class CreateTeam extends React.Component {
     if (nameError) {
       errorList.push(nameError);
     }
+
     return (
       <Container text>
         <Header as="h2">Create a team</Header>
@@ -78,10 +71,10 @@ class CreateTeam extends React.Component {
           <Message error header="There was some errors with your submission" list={errorList} />
         ) : null}
       </Container>
-
     );
   }
 }
+
 const createTeamMutation = gql`
   mutation($name: String!) {
     createTeam(name: $name) {

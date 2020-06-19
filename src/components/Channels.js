@@ -1,6 +1,3 @@
-/* eslint-disable react/jsx-one-expression-per-line */
-/* eslint-disable react/react-in-jsx-scope */
-/* eslint-disable import/no-unresolved */
 import React from 'react';
 import styled from 'styled-components';
 import { Icon } from 'semantic-ui-react';
@@ -34,11 +31,17 @@ const SideBarListItem = styled.li`
   }
 `;
 
-const SideBarListHeader = styled.li`${paddingLeft};`;
+const SideBarListHeader = styled.li`
+  ${paddingLeft};
+`;
 
-const PushLeft = styled.div`${paddingLeft};`;
+const PushLeft = styled.div`
+  ${paddingLeft};
+`;
 
-const Green = styled.span`color: #38978d;`;
+const Green = styled.span`
+  color: #38978d;
+`;
 
 const Bubble = ({ on = true }) => (on ? <Green>●</Green> : '○');
 
@@ -48,7 +51,7 @@ const channel = ({ id, name }, teamId) => (
   </Link>
 );
 
-const dmChannel = ({ id, name},teamId) => (
+const dmChannel = ({ id, name }, teamId) => (
   <SideBarListItem key={`user-${id}`}>
     <Link to={`/view-team/${teamId}/${id}`}>
       <Bubble /> {name}
@@ -83,21 +86,17 @@ export default ({
     <div>
       <SideBarList>
         <SideBarListHeader>
-        Direct Messages <Icon onClick={onDirectMessageClick} name="add circle" />
-          
-          </SideBarListHeader>
-        {dmChannels.map(dmC => dmChannel(dmC,teamId))}
+          Direct Messages <Icon onClick={onDirectMessageClick} name="add circle" />
+        </SideBarListHeader>
+        {dmChannels.map(dmC => dmChannel(dmC, teamId))}
       </SideBarList>
     </div>
-
     {isOwner && (
-
-    <div>
-      <a href="#invite-people" onClick={onInvitePeopleClick}>
-        + Invite People
-      </a>
-    </div>
-
+      <div>
+        <a href="#invite-people" onClick={onInvitePeopleClick}>
+          + Invite People
+        </a>
+      </div>
     )}
   </ChannelWrapper>
 );

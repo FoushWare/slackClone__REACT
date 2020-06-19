@@ -16,7 +16,7 @@ const newChannelMessageSubscription = gql`
       }
       url
       filetype
-      created_at
+      createdAt
     }
   }
 `;
@@ -59,7 +59,7 @@ class MessageContainer extends React.Component {
 
     if (
       this.scroller &&
-      this.scroller.scrollTop < 100 &&
+      this.scroller.scrollTop < 20 &&
       this.props.data.messages &&
       messages &&
       this.props.data.messages.length !== messages.length
@@ -110,7 +110,7 @@ class MessageContainer extends React.Component {
       fetchMore({
         variables: {
           channelId,
-          cursor: messages[messages.length - 1].created_at,
+          cursor: messages[messages.length - 1].createdAt,
         },
         updateQuery: (previousResult, { fetchMoreResult }) => {
           if (!fetchMoreResult) {
@@ -165,7 +165,7 @@ class MessageContainer extends React.Component {
                   <Comment.Content>
                     <Comment.Author as="a">{m.user.username}</Comment.Author>
                     <Comment.Metadata>
-                      <div>{m.created_at}</div>
+                      <div>{m.createdAt}</div>
                     </Comment.Metadata>
                     <Message message={m} />
                     <Comment.Actions>
@@ -191,7 +191,7 @@ const messagesQuery = gql`
       }
       url
       filetype
-      created_at
+      createdAt
     }
   }
 `;

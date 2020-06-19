@@ -1,18 +1,12 @@
-/* eslint-disable no-multi-spaces */
-/* eslint-disable import/first */
-/* eslint-disable import/no-unresolved */
-/* eslint-disable no-unused-vars */
 import React from 'react';
-import {
-  Form, Input, Button, Modal,Checkbox
-} from 'semantic-ui-react';
+import { Checkbox, Form, Input, Button, Modal } from 'semantic-ui-react';
 import { withFormik } from 'formik';
 import gql from 'graphql-tag';
-import { graphql, compose } from 'react-apollo';
+import { compose, graphql } from 'react-apollo';
 import findIndex from 'lodash/findIndex';
+
 import { meQuery } from '../graphql/team';
 import MultiSelectUsers from './MultiSelectUsers';
-
 
 const AddChannelModal = ({
   open,
@@ -26,31 +20,30 @@ const AddChannelModal = ({
   setFieldValue,
   teamId,
   currentUserId,
-
 }) => (
-    <Modal
-      open={open}
-      onClose={(e) => {
-        resetForm();
-        onClose(e);
-      }}
-    >
-      <Modal.Header>Add Channel</Modal.Header>
-      <Modal.Content>
-        <Form>
-          <Form.Field>
-            <Input
-              value={values.name}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              name="name"
-              fluid
-              placeholder="Channel name"
-            />
-          </Form.Field>
-
-
-          <Form.Field>
+  <Modal
+  style={{height: 'auto',marginTop:100,width:'90%',margin:'auto',display:'flex'}}
+    open={open}
+    onClose={(e) => {
+      resetForm();
+      onClose(e);
+    }}
+    className="scrolling"
+  >
+    <Modal.Header>Add Channel</Modal.Header>
+    <Modal.Content>
+      <Form>
+        <Form.Field>
+          <Input
+            value={values.name}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            name="name"
+            fluid
+            placeholder="Channel name"
+          />
+        </Form.Field>
+        <Form.Field>
           <Checkbox
             checked={!values.public}
             label="Private"
@@ -68,31 +61,36 @@ const AddChannelModal = ({
               currentUserId={currentUserId}
             />
           </Form.Field>
-  )}
-
-          <Form.Group widths="equal">
-            <Button
-              disabled={isSubmitting}
-              fluid
-              onClick={(e) => {
-                resetForm();
-                onClose(e);
-              }}
-            >
-              Cancel
+        )}
+        <Form.Group widths="equal">
+          <Button
+          style={{margin:5}}
+            disabled={isSubmitting}
+            fluid
+            onClick={(e) => {
+              resetForm();
+              onClose(e);
+            }}
+          >
+            Cancel
           </Button>
-            <Button disabled={isSubmitting} onClick={handleSubmit} fluid>
-              Create Channel
+          <Button     
+             color='purple'
+              icon='add'
+              labelPosition='left'  
+              style={{margin:5}}
+          disabled={isSubmitting} onClick={handleSubmit} fluid>
+            Create Channel
           </Button>
-          </Form.Group>
-        </Form>
-      </Modal.Content>
-    </Modal>
-  );
+        </Form.Group>
+      </Form>
+    </Modal.Content>
+  </Modal>
+);
 
 const createChannelMutation = gql`
-mutation($teamId: Int!, $name: String!, $public: Boolean, $members: [Int!]) {
-  createChannel(teamId: $teamId, name: $name, public: $public, members: $members) {
+  mutation($teamId: Int!, $name: String!, $public: Boolean, $members: [Int!]) {
+    createChannel(teamId: $teamId, name: $name, public: $public, members: $members) {
       ok
       channel {
         id
@@ -123,7 +121,7 @@ export default compose(
               __typename: 'Channel',
               id: -1,
               name: values.name,
-              dm:false
+              dm: false,
             },
           },
         },
@@ -143,5 +141,4 @@ export default compose(
       setSubmitting(false);
     },
   }),
-
 )(AddChannelModal);

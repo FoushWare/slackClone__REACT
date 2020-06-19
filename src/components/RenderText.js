@@ -1,9 +1,10 @@
-import React, { Component } from "react";
+import React from 'react';
 
-export default class RenderText extends Component {
+export default class RenderText extends React.Component {
   state = {
-    text: "",
+    text: '',
   };
+
   componentWillMount = async () => {
     const response = await fetch(this.props.url);
     const text = await response.text();
@@ -11,7 +12,7 @@ export default class RenderText extends Component {
   };
 
   render() {
-    const { text } = this.props;
+    const { text } = this.state;
     return (
       <div>
         <div>-----</div>

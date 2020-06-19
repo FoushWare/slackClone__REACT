@@ -2,12 +2,12 @@ import React from 'react';
 import Dropzone from 'react-dropzone';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
+
 const FileUpload = ({
-  children, disableClick, channelId, mutate,style={},
-  
-}) => console.log("channelId for fileupload : " + channelId) ||(
+  children, disableClick, channelId, mutate, style = {},
+}) => (
   <Dropzone
-  style={style}
+    style={style}
     className="ignore"
     onDrop={async ([file]) => {
       const response = await mutate({
@@ -23,6 +23,7 @@ const FileUpload = ({
     {children}
   </Dropzone>
 );
+
 const createFileMessageMutation = gql`
   mutation($channelId: Int!, $file: File) {
     createMessage(channelId: $channelId, file: $file)

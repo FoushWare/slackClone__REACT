@@ -1,8 +1,4 @@
-/* eslint-disable no-empty */
-/* eslint-disable import/no-unresolved */
-/* eslint-disable react/state-in-constructor */
 import React from 'react';
-// import decode from 'jwt-decode';
 
 import Channels from '../components/Channels';
 import Teams from '../components/Teams';
@@ -14,7 +10,7 @@ export default class Sidebar extends React.Component {
   state = {
     openAddChannelModal: false,
     openInvitePeopleModal: false,
-    openDirectMessageModal:false,
+    openDirectMessageModal: false,
   };
 
   toggleDirectMessageModal = (e) => {
@@ -31,7 +27,6 @@ export default class Sidebar extends React.Component {
     this.setState(state => ({ openAddChannelModal: !state.openAddChannelModal }));
   };
 
-
   toggleInvitePeopleModal = (e) => {
     if (e) {
       e.preventDefault();
@@ -39,32 +34,22 @@ export default class Sidebar extends React.Component {
     this.setState(state => ({ openInvitePeopleModal: !state.openInvitePeopleModal }));
   };
 
-
-
   render() {
-    const { teams, team,username,currentUserId } = this.props;
-    const { openInvitePeopleModal, openAddChannelModal,openDirectMessageModal } = this.state;
+    const {
+      teams, team, username, currentUserId,
+    } = this.props;
+    const { openInvitePeopleModal, openAddChannelModal, openDirectMessageModal } = this.state;
 
     const regularChannels = [];
     const dmChannels = [];
 
-    team.channels.forEach(c => {
-      if(c.dm){
+    team.channels.forEach((c) => {
+      if (c.dm) {
         dmChannels.push(c);
-      }else{
+      } else {
         regularChannels.push(c);
       }
     });
-
-    // let username = '';
-    // let isOwner = false;
-    // try {
-    //   const token = localStorage.getItem('token');
-    //   const { user } = decode(token);
-    //   // eslint-disable-next-line prefer-destructuring
-    //   username = user.username;
-    //   isOwner  =  user.id === team.owner; 
-    // } catch (err) {}
 
     return [
       <Teams key="team-sidebar" teams={teams} />,
@@ -78,14 +63,14 @@ export default class Sidebar extends React.Component {
         onAddChannelClick={this.toggleAddChannelModal}
         onInvitePeopleClick={this.toggleInvitePeopleModal}
         onDirectMessageClick={this.toggleDirectMessageModal}
-        isOwner = {team.admin}
-        currentUserId={currentUserId}
+        isOwner={team.admin}
       />,
-         <DirectMessageModal
+      <DirectMessageModal
         teamId={team.id}
         onClose={this.toggleDirectMessageModal}
         open={openDirectMessageModal}
         key="sidebar-direct-message-modal"
+        currentUserId={currentUserId}
       />,
       <AddChannelModal
         teamId={team.id}

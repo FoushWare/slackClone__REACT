@@ -1,52 +1,46 @@
-/* eslint-disable import/extensions */
-/* eslint-disable import/no-unresolved */
-/* eslint-disable react/jsx-props-no-spreading */
-
 import React from 'react';
-import {
-  BrowserRouter, Route, Switch, Redirect,
-} from 'react-router-dom';
+import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import decode from 'jwt-decode';
+
 import Home from './Home';
 import Register from './Register';
 import Login from './Login';
-import ViewTeam from './ViewTeam';
 import CreateTeam from './CreateTeam';
+import ViewTeam from './ViewTeam';
 
-
-
-
-// check if the token in valid or not
 const isAuthenticated = () => {
   const token = localStorage.getItem('token');
   const refreshToken = localStorage.getItem('refreshToken');
   try {
     decode(token);
-    decode(refreshToken);
+    const { exp } = decode(refreshToken);
+    if (Date.now() / 1000 > exp) {
+      return false;
+    }
   } catch (err) {
     return false;
   }
+
   return true;
 };
-// Redirect to the login if the token is invalid
+
 const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route
     {...rest}
-    render={(props) => (isAuthenticated() ? (
-      <Component {...props} />
-    ) : (
-      <Redirect
-        to={{
-          pathname: '/login',
-        }}
-      />
-    ))}
+    render={props =>
+      (isAuthenticated() ? (
+        <Component {...props} />
+      ) : (
+        <Redirect
+          to={{
+            pathname: '/login',
+          }}
+        />
+      ))
+    }
   />
 );
-/**
- * With react-router-dom , we designate a dynamic portion of the URL 
- * to be matched by putting a colon ( : ) before it
- */
+
 export default () => (
   <BrowserRouter>
     <Switch>

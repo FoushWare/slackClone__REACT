@@ -1,12 +1,11 @@
 import gql from 'graphql-tag';
 
-export const meQuery= gql`
+export const meQuery = gql`
   {
-
     me {
       id
       username
-      teams{
+      teams {
         id
         name
         admin
@@ -14,14 +13,13 @@ export const meQuery= gql`
           id
           username
         }
-        channels{
+        channels {
           id
           name
           dm
         }
       }
     }
-
   }
 `;
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Button, Modal } from 'semantic-ui-react';
+import { Form, Button, Modal,Divider } from 'semantic-ui-react';
 import { graphql, compose } from 'react-apollo';
 import { withRouter } from 'react-router-dom';
 import { withFormik } from 'formik';
@@ -20,7 +20,8 @@ const DirectMessageModal = ({
   resetForm,
   setFieldValue,
 }) => (
-  <Modal open={open} onClose={onClose}>
+  <Modal open={open} onClose={onClose}    style={{height: 'auto',marginTop:100,width:'90%',margin:'auto',display:'flex'}}
+  >
     <Modal.Header>Direct Messaging</Modal.Header>
     <Modal.Content>
       <Form>
@@ -34,7 +35,9 @@ const DirectMessageModal = ({
           />
         </Form.Field>
         <Form.Group>
+        
           <Button
+           style={{margin:5}}
             disabled={isSubmitting}
             fluid
             onClick={(e) => {
@@ -44,7 +47,13 @@ const DirectMessageModal = ({
           >
             Cancel
           </Button>
-          <Button disabled={isSubmitting} fluid onClick={handleSubmit}>
+         
+
+          <Button 
+           color='purple'
+           style={{margin:5}}
+           
+          disabled={isSubmitting} fluid onClick={handleSubmit}>
             Start Messaging
           </Button>
         </Form.Group>
@@ -93,12 +102,9 @@ export default compose(
             });
             store.writeQuery({ query: meQuery, data });
           }
-           history.push(`/view-team/${teamId}/${id}`);
+          history.push(`/view-team/${teamId}/${id}`);
         },
       });
-      console.log(response);
-      onClose();
-      resetForm();
     },
   }),
 )(DirectMessageModal);
